@@ -2,9 +2,9 @@ package upgrade.volcano.adapter.validation;
 
 import org.junit.jupiter.api.Test;
 
-class BookingValidationImplTest {
+class BookingValidatorImplTest {
 
-    private BookingValidationImpl bookingValidation = new BookingValidationImpl();
+    private BookingValidatorImpl bookingValidation = new BookingValidatorImpl();
 
     @Test
     public void testValidBookingDuration() {

@@ -8,13 +8,18 @@ import java.time.LocalDate;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-public class BookingValidationImpl implements BookingValidator {
+public class BookingValidatorImpl implements BookingValidator {
 
     // move to config
-    private static Integer MAX_DURATION = 3;
-    private static Long BOOKING_MIN_DAYS_IN_ADV = 1L;
-    private static Long BOOKING_MAX_DAYS_IN_ADV = 30L;
+    private final Integer bookingMaxDuration;
+    private final Long bookingMinDaysInAdv;
+    private final Long bookingMaxDaysInAdv;
 
+    public BookingValidatorImpl(final Integer bookingMaxDuration, final Long bookingMinDaysInAdv, final Long bookingMaxDaysInAdv) {
+        this.bookingMaxDuration = bookingMaxDuration;
+        this.bookingMinDaysInAdv = bookingMinDaysInAdv;
+        this.bookingMaxDaysInAdv = bookingMaxDaysInAdv;
+    }
 
     @Override
     public void validate(Booking booking) {
@@ -25,8 +30,8 @@ public class BookingValidationImpl implements BookingValidator {
     private void validateAdvanceBooking(final Booking booking) {
         //  The campsite can be reserved minimum 1 day(s) ahead of arrival and up to 1 month in advance.
         final LocalDate today = LocalDate.now();
-        final LocalDate startPeriod = LocalDate.now().plusDays(BOOKING_MIN_DAYS_IN_ADV);
-        final LocalDate endPeriod = LocalDate.now().plusDays(BOOKING_MAX_DAYS_IN_ADV);
+        final LocalDate startPeriod = LocalDate.now().plusDays(bookingMinDaysInAdv);
+        final LocalDate endPeriod = LocalDate.now().plusDays(bookingMaxDaysInAdv);
 
         // change
         if (!isEqualOrAfter(booking.getStartDate(), startPeriod)
@@ -48,9 +53,9 @@ public class BookingValidationImpl implements BookingValidator {
     private void validateMaxDuration(final Booking booking) {
         // The campsite can be reserved for max MAX_DURATION days.
         final long daysBetween = DAYS.between(booking.getStartDate(), booking.getEndDate());
-        if (daysBetween > MAX_DURATION) {
+        if (daysBetween > bookingMaxDuration) {
             throw new BookingException(BookingException.ErrorType.INVALID_DATES,
-                    "The campsite can be reserved for max " + MAX_DURATION + " days");
+                    "The campsite can be reserved for max " + bookingMaxDuration + " days");
         }
     }
 

@@ -1,0 +1,14 @@
+spring:
+application:
+  name:"Booking Service"
+  datasource:
+    url:"jdbc:postgresql://localhost:5432/test/volcano"
+    username:test
+    password:test
+
+booking:
+  duration:
+    max:3
+  advance:
+    min:1
+    max:30
