@@ -30,7 +30,9 @@ public class BookingManagerImpl implements BookingManager {
     }
 
     @Override
-    public List<LocalDate> availableDates(LocalDate startDate, LocalDate endDate) {
+    public List<LocalDate> availableDates(final LocalDate startDate, final LocalDate endDate) {
+        // get list of available dates for the full month.
+
         return null;
     }
 

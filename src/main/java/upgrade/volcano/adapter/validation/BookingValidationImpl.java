@@ -31,7 +31,8 @@ public class BookingValidationImpl implements BookingValidator {
         // change
         if (!isEqualOrAfter(booking.getStartDate(), startPeriod)
                 || !isBeforeOrEqual(booking.getStartDate(), endPeriod)) {
-            throw new BookingException(BookingException.ErrorType.INVALID_DATES, "The campsite can be reserved minimum 1 day(s) ahead of arrival and up to 1 month in advance ");
+            throw new BookingException(BookingException.ErrorType.INVALID_DATES,
+                    "The campsite can be reserved minimum 1 day(s) ahead of arrival and up to 1 month in advance ");
         }
     }
 
@@ -48,7 +49,8 @@ public class BookingValidationImpl implements BookingValidator {
         // The campsite can be reserved for max MAX_DURATION days.
         final long daysBetween = DAYS.between(booking.getStartDate(), booking.getEndDate());
         if (daysBetween > MAX_DURATION) {
-            throw new BookingException(BookingException.ErrorType.INVALID_DATES, "The campsite can be reserved for max " + MAX_DURATION + " days");
+            throw new BookingException(BookingException.ErrorType.INVALID_DATES,
+                    "The campsite can be reserved for max " + MAX_DURATION + " days");
         }
     }
 
