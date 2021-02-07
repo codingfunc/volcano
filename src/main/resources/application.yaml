@@ -1,10 +1,16 @@
+project:
+  name: "Volcano Booking Service"
+
 spring:
-application:
-  name:"Booking Service"
+  application:
+    name:${project.name}
   datasource:
-    url:"jdbc:postgresql://localhost:5432/test/volcano"
-    username:test
-    password:test
+    url: "jdbc:postgresql://localhost:5433/test?currentSchema=volcano"
+    username: test
+    password: test
+    jpa:
+      hibernate:
+        ddl.auto: none
 
 booking:
   duration:
