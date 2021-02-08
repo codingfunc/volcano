@@ -1,5 +1,5 @@
 project:
-  name: "Volcano Booking Service"
+  name: "Volcano Island Booking Service"
 
 spring:
   application:
@@ -14,7 +14,7 @@ spring:
 
 booking:
   duration:
-    max:3
+    max: 3
   advance:
-    min:1
-    max:30
+    min: 1
+    max: 30

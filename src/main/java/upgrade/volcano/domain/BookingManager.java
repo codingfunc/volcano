@@ -3,7 +3,7 @@ package upgrade.volcano.domain;
 import upgrade.volcano.domain.model.Booking;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface BookingManager {
@@ -28,5 +28,5 @@ public interface BookingManager {
      * @param endDate end date. If null then current date + 30 days is used
      * @return returns a list of days for booking.
      */
-    List<LocalDate> availableDates(LocalDate startDate, LocalDate endDate);
+    Set<LocalDate> availableDates(LocalDate startDate, LocalDate endDate);
 }

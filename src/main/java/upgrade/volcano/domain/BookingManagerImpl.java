@@ -3,7 +3,7 @@ package upgrade.volcano.domain;
 import upgrade.volcano.domain.model.Booking;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class BookingManagerImpl implements BookingManager {
@@ -30,7 +30,7 @@ public class BookingManagerImpl implements BookingManager {
     }
 
     @Override
-    public List<LocalDate> availableDates(final LocalDate startDate, final LocalDate endDate) {
+    public Set<LocalDate> availableDates(final LocalDate startDate, final LocalDate endDate) {
         // get list of available dates for the full month.
 
         return null;

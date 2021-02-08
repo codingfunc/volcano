@@ -8,6 +8,7 @@ import upgrade.volcano.domain.model.Booking;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +40,7 @@ public class BookingRepositoryImpl implements BookingRepository {
 
     @Override
     public List<Booking> availableDates(LocalDate startingDate, LocalDate endDate) {
-        return availableDates(startingDate, endDate);
+        return new ArrayList<>();
+//        return availableDates(startingDate, endDate);
     }
 }
