@@ -1,5 +1,6 @@
 package upgrade.volcano.adapter.postgres;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import upgrade.volcano.adapter.cache.BookingCache;
 import upgrade.volcano.adapter.postgres.jpa.BookingJpaRepository;
@@ -17,7 +18,9 @@ public class BookingRepositoryImpl implements BookingRepository {
 
     private final BookingJpaRepository jpaRepository;
     private final BookingCache bookingCache;
+    private final EntityMapper entityMapper = new EntityMapper();
 
+    @Autowired
     public BookingRepositoryImpl(final BookingJpaRepository jpaRepository, final BookingCache bookingCache){
         this.jpaRepository = jpaRepository;
         this.bookingCache = bookingCache;
@@ -26,9 +29,8 @@ public class BookingRepositoryImpl implements BookingRepository {
     @Override
     @Transactional
     public Booking book(Booking booking) {
-//        var entity =  jpaRepository.save(booking);
+        jpaRepository.save(entityMapper.map(booking));
         return null;
-
     }
 
     @Override
