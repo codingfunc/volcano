@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface BookingRepository {
-    Booking book(Booking booking);
+    UUID book(Booking booking);
 
     void cancel(UUID bookingId, String email);
 

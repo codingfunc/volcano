@@ -2,7 +2,7 @@ package upgrade.volcano.domain.exception;
 
 public class BookingException extends RuntimeException {
 
-    public static enum ErrorType {
+    public enum ErrorType {
         INVALID_DATES,
         BOOKING_ID_NOT_FOUND
 

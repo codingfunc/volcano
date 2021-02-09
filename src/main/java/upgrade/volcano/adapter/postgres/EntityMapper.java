@@ -10,10 +10,17 @@ public class EntityMapper {
     public BookingEntity map(final Booking booking){
         BookingEntity entity = new BookingEntity();
         entity.setId(booking.getId());
-        entity.setEmail(booking.getClientName());
+        entity.setUserName(booking.getClientName());
+        entity.setEmail(booking.getEmail());
         entity.setStartDate(booking.getStartDate());
         entity.setEndDate(booking.getEndDate());
         return entity;
+    }
+
+    public void populateEntity(final BookingEntity entity, final Booking booking){
+        entity.setUserName(booking.getClientName());
+        entity.setStartDate(booking.getStartDate());
+        entity.setEndDate(booking.getEndDate());
     }
 
 }

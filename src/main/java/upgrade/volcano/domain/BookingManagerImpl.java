@@ -20,8 +20,7 @@ public class BookingManagerImpl implements BookingManager {
     @Override
     public UUID book(final Booking request) {
         bookingValidator.validate(request);
-        final var booking = bookingRepository.book(request);
-        return booking.getId();
+        return bookingRepository.book(request);
     }
 
     @Override
