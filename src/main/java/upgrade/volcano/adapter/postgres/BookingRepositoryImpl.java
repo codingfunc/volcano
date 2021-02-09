@@ -48,8 +48,11 @@ public class BookingRepositoryImpl implements BookingRepository {
     @Override
     @Transactional
     public void cancel(UUID bookingId, String email) {
-//        jpaRepository.cancel(bookingId, email);
-
+        BookingEntity entity = jpaRepository.findByIdAndEmail(bookingId, email);
+        if (Objects.isNull(entity)) {
+            throw new BookingException(BookingException.ErrorType.BOOKING_ID_NOT_FOUND, "Booking id: {" + bookingId + "} not found");
+        }
+        entity.setIsCancelled(true);
     }
 
     @Override

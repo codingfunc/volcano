@@ -3,7 +3,6 @@ package upgrade.volcano.adapter.postgres.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Generated;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -11,7 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -30,29 +28,29 @@ public class BookingEntity {
             strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @Column(name="user_name")
+    @Column(name = "user_name")
     private String userName;
 
-    @Column(name="user_email")
+    @Column(name = "user_email")
     private String email;
 
-    @Column(name="start_date")
+    @Column(name = "start_date")
     private LocalDate startDate;
 
-    @Column(name="end_date")
+    @Column(name = "end_date")
     private LocalDate endDate;
 
-    @Column(name="is_cancelled")
+    @Column(name = "is_cancelled")
     private Boolean isCancelled;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="created_on")
+    @Column(name = "created_on")
     private Date createdOn;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="last_modified")
+    @Column(name = "last_modified")
     private Date lastModified;
 
 }
