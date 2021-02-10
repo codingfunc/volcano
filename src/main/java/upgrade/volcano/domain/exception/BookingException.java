@@ -4,8 +4,8 @@ public class BookingException extends RuntimeException {
 
     public enum ErrorType {
         INVALID_DATES,
-        BOOKING_ID_NOT_FOUND
-
+        BOOKING_NOT_FOUND,
+        DATES_NOT_AVAILABLE
     }
 
     private final ErrorType errorType;
@@ -18,5 +18,9 @@ public class BookingException extends RuntimeException {
     public BookingException(final ErrorType errorType, final String message, final Throwable throwable) {
         super(message, throwable);
         this.errorType = errorType;
+    }
+
+    public ErrorType getErrorType() {
+        return errorType;
     }
 }

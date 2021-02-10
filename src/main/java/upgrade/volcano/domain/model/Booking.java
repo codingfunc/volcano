@@ -9,14 +9,14 @@ import java.util.UUID;
 
 public class Booking {
     private final Optional<UUID> id;
-    private final String clientName;
+    private final String name;
     private final String email;
     private final LocalDate startDate;
     private final LocalDate endDate;
 
-    private Booking(final UUID id, final String clientName, final String email, final LocalDate startDate, final LocalDate endDate) {
+    private Booking(final UUID id, final String name, final String email, final LocalDate startDate, final LocalDate endDate) {
         this.id = Optional.ofNullable(id);
-        this.clientName = clientName;
+        this.name = name;
         this.email = email;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -27,20 +27,20 @@ public class Booking {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Booking booking = (Booking) o;
-        return id.equals(booking.id) && clientName.equals(booking.clientName) && email.equals(booking.email) && startDate.equals(booking.startDate) && endDate.equals(booking.endDate);
+        return id.equals(booking.id) && name.equals(booking.name) && email.equals(booking.email) && startDate.equals(booking.startDate) && endDate.equals(booking.endDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, clientName, email, startDate, endDate);
+        return Objects.hash(id, name, email, startDate, endDate);
     }
 
     public UUID getId() {
         return id.orElse(null);
     }
 
-    public String getClientName() {
-        return clientName;
+    public String getName() {
+        return name;
     }
 
     public String getEmail() {
@@ -59,36 +59,37 @@ public class Booking {
     public String toString() {
         return "Booking{" +
                 "id=" + id +
-                ", clientName='" + clientName + '\'' +
+                ", name='" + name + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 '}';
     }
 
-    public static Builder builder(){
+    public static Builder builder() {
         return new Builder();
     }
+
     public static class Builder {
         private UUID id;
-        private String clientName;
+        private String name;
         private String email;
         private LocalDate startDate;
         private LocalDate endDate;
 
         public Booking build() {
-            Validate.notBlank(clientName);
-            Validate.notBlank(clientName);
+            Validate.notBlank(name);
+            Validate.notBlank(name);
             Validate.notNull(startDate);
             Validate.notNull(endDate);
-            return new Booking(id, clientName, email, startDate, endDate);
+            return new Booking(id, name, email, startDate, endDate);
         }
 
         public Builder forClient(final String clientName) {
-            this.clientName = clientName;
+            this.name = clientName;
             return this;
         }
 
-        public Builder forEmail(final String email){
+        public Builder forEmail(final String email) {
             this.email = email;
             return this;
         }

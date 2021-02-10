@@ -28,10 +28,10 @@ public class BookingEntity {
             strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @Column(name = "user_name")
-    private String userName;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "user_email")
+    @Column(name = "email")
     private String email;
 
     @Column(name = "start_date")

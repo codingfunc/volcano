@@ -6,8 +6,8 @@ spring:
     name:${project.name}
   datasource:
     url: "jdbc:postgresql://localhost:5433/test?currentSchema=volcano"
-    username: test
-    password: test
+    username: aha
+    password: aDm1n
     jpa:
       hibernate:
         ddl.auto: none

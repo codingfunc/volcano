@@ -11,7 +11,10 @@ import upgrade.volcano.domain.model.Booking;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Component
 public class BookingRepositoryImpl implements BookingRepository {
@@ -30,18 +33,17 @@ public class BookingRepositoryImpl implements BookingRepository {
     @Transactional
     public UUID book(Booking booking) {
         if (Objects.isNull(booking.getId())) {
-            final BookingEntity entity = entityMapper.map(booking);
+            final var entity = entityMapper.map(booking);
             jpaRepository.save(entity);
             return entity.getId();
         } else {
-            final Optional<BookingEntity> entity = jpaRepository.findById(booking.getId());
-            if (entity.isEmpty()) {
-                throw new BookingException(BookingException.ErrorType.BOOKING_ID_NOT_FOUND, "Booking id: {" + booking.getId() + "} not found");
+            final var entity = jpaRepository.findByIdAndEmail(booking.getId(), booking.getEmail());
+            if (Objects.isNull(entity)) {
+                throw new BookingException(BookingException.ErrorType.BOOKING_NOT_FOUND, "Booking id:{" + booking.getId() + "}, email:{" + booking.getEmail() + "not found");
             }
-            entityMapper.populateEntity(entity.get(), booking);
-            return entity.get().getId();
+            entityMapper.populateEntity(entity, booking);
+            return entity.getId();
         }
-
     }
 
 
@@ -50,7 +52,7 @@ public class BookingRepositoryImpl implements BookingRepository {
     public void cancel(UUID bookingId, String email) {
         BookingEntity entity = jpaRepository.findByIdAndEmail(bookingId, email);
         if (Objects.isNull(entity)) {
-            throw new BookingException(BookingException.ErrorType.BOOKING_ID_NOT_FOUND, "Booking id: {" + bookingId + "} not found");
+            throw new BookingException(BookingException.ErrorType.BOOKING_NOT_FOUND, "Booking id: {" + bookingId + "} not found");
         }
         entity.setIsCancelled(true);
     }

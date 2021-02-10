@@ -40,7 +40,6 @@ public class BookingController {
     @PutMapping(path = "/book")
     public ResponseEntity<UUID> book(
             @RequestBody(required = true) BookingDto booking) {
-
         final Booking input = inputMapper.map(booking);
         return ResponseEntity.ok(bookingManager.book(input));
     }
