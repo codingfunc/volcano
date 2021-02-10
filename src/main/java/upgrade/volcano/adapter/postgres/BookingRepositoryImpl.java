@@ -39,7 +39,7 @@ public class BookingRepositoryImpl implements BookingRepository {
         } else {
             final var entity = jpaRepository.findByIdAndEmail(booking.getId(), booking.getEmail());
             if (Objects.isNull(entity)) {
-                throw new BookingException(BookingException.ErrorType.BOOKING_NOT_FOUND, "Booking id:{" + booking.getId() + "}, email:{" + booking.getEmail() + "not found");
+                throw new BookingException(BookingException.ErrorType.BOOKING_NOT_FOUND, "Booking id:[" + booking.getId() + "], email:[" + booking.getEmail() + "] not found");
             }
             entityMapper.populateEntity(entity, booking);
             return entity.getId();

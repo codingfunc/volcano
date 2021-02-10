@@ -1,0 +1,20 @@
+project:
+  name: "Volcano Island Booking Service"
+
+spring:
+  application:
+    name:${project.name}
+  datasource:
+    url: "jdbc:postgresql://localhost:5433/test?currentSchema=volcano"
+    username: aha
+    password: aDm1n
+    jpa:
+      hibernate:
+        ddl.auto: none
+
+booking:
+  duration:
+    max: 3
+  advance:
+    min: 1
+    max: 30

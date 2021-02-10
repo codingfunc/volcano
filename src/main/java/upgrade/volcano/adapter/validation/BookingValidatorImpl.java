@@ -23,8 +23,17 @@ public class BookingValidatorImpl implements BookingValidator {
 
     @Override
     public void validate(Booking booking) {
+        validateDateOrder(booking);
         validateMaxDuration(booking);
         validateAdvanceBooking(booking);
+    }
+
+    private void validateDateOrder(Booking booking) {
+        if(!isBeforeOrEqual(booking.getStartDate(),booking.getEndDate())){
+            throw new BookingException(BookingException.ErrorType.INVALID_DATES,
+                    "Start date [" + booking.getStartDate().toString() +"] must be same or before departure date [" + booking.getEndDate() +"]");
+
+        }
     }
 
     private void validateAdvanceBooking(final Booking booking) {
