@@ -22,6 +22,7 @@ public class BookingExceptionHandler {
     private HttpStatus getExceptionHttpStatus(BookingException exception) {
         switch (exception.getErrorType()) {
             case INVALID_DATES:
+            case INVALID_INPUT:
             case BOOKING_NOT_FOUND:
                 return HttpStatus.BAD_REQUEST;
             case DATES_NOT_AVAILABLE:

@@ -30,7 +30,7 @@ public class BookingValidatorImpl implements BookingValidator {
 
     private void validateDateOrder(Booking booking) {
         if(!isBeforeOrEqual(booking.getStartDate(),booking.getEndDate())){
-            throw new BookingException(BookingException.ErrorType.INVALID_DATES,
+            throw new BookingException(BookingException.ErrorType.INVALID_INPUT,
                     "Start date [" + booking.getStartDate().toString() +"] must be same or before departure date [" + booking.getEndDate() +"]");
 
         }
@@ -61,7 +61,7 @@ public class BookingValidatorImpl implements BookingValidator {
 
     private void validateMaxDuration(final Booking booking) {
         // The campsite can be reserved for max MAX_DURATION days.
-        final long daysBetween = DAYS.between(booking.getStartDate(), booking.getEndDate());
+        final long daysBetween = DAYS.between(booking.getStartDate(), booking.getEndDate()) + 1;
         if (daysBetween > bookingMaxDuration) {
             throw new BookingException(BookingException.ErrorType.INVALID_DATES,
                     "The campsite can be reserved for max " + bookingMaxDuration + " days");
