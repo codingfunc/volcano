@@ -12,6 +12,7 @@ import upgrade.volcano.domain.BookingManager;
 import upgrade.volcano.domain.BookingManagerImpl;
 import upgrade.volcano.domain.BookingRepository;
 import upgrade.volcano.domain.BookingValidator;
+import upgrade.volcano.domain.model.ConstraintsConfig;
 
 @Configuration
 public class BookingConfiguration {
@@ -29,23 +30,28 @@ public class BookingConfiguration {
     private BookingJpaRepository bookingJpaRepository;
 
     @Bean
+    public ConstraintsConfig constraintsConfig() {
+        return new ConstraintsConfig(bookingMaxDuration, bookingMinDaysInAdvance, bookingMaxDaysInAdvance);
+    }
+
+    @Bean
     BookingCache bookingCache() {
         return new BookingCache(bookingMaxDaysInAdvance);
     }
 
     @Bean
     public BookingValidator bookingValidator() {
-        return new BookingValidatorImpl(bookingMaxDuration, bookingMinDaysInAdvance, bookingMaxDaysInAdvance);
+        return new BookingValidatorImpl(constraintsConfig());
     }
 
 
     @Bean
     public BookingRepository bookingRepository() {
-        return new BookingRepositoryImpl(bookingJpaRepository, bookingCache());
+        return new BookingRepositoryImpl(bookingJpaRepository);
     }
 
     @Bean
     public BookingManager bookingManager() {
-        return new BookingManagerImpl(bookingRepository(), bookingValidator());
+        return new BookingManagerImpl(bookingRepository(), bookingValidator(), bookingCache());
     }
 }

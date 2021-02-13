@@ -4,12 +4,14 @@ import org.springframework.stereotype.Component;
 import upgrade.volcano.adapter.postgres.entity.BookingEntity;
 import upgrade.volcano.domain.model.Booking;
 
+import java.util.UUID;
+
 @Component
 public class EntityMapper {
 
     public BookingEntity map(final Booking booking) {
         BookingEntity entity = new BookingEntity();
-        entity.setId(booking.getId());
+        entity.setBookingId(booking.getId().toString());
         entity.setName(booking.getName());
         entity.setEmail(booking.getEmail());
         entity.setStartDate(booking.getStartDate());
@@ -19,7 +21,7 @@ public class EntityMapper {
 
     public Booking map(final BookingEntity entity) {
         return
-                Booking.builder().forId(entity.getId())
+                Booking.builder().forId(UUID.fromString(entity.getBookingId()))
                         .forClient(entity.getName())
                         .forEmail(entity.getEmail())
                         .startingAt(entity.getStartDate())
@@ -28,7 +30,9 @@ public class EntityMapper {
     }
 
 
-    public void populateEntity(final BookingEntity entity, final Booking booking) {
+    public void updateEntity(final BookingEntity entity, final Booking booking) {
+        // will not
+        entity.setEmail(booking.getEmail());
         entity.setName(booking.getName());
         entity.setStartDate(booking.getStartDate());
         entity.setEndDate(booking.getEndDate());

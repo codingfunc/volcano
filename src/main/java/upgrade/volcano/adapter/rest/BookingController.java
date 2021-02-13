@@ -6,9 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import upgrade.volcano.adapter.rest.dto.BookingRequest;
+import upgrade.volcano.adapter.rest.dto.BookingDto;
 import upgrade.volcano.domain.BookingManager;
-import upgrade.volcano.domain.model.Booking;
+import upgrade.volcano.domain.model.BookingRequest;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -34,21 +34,21 @@ public class BookingController {
     public ResponseEntity<Collection<LocalDate>> getAvailableDates(
             @RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> startDate,
             @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> endDate) {
-        return ResponseEntity.ok(bookingManager.availableDates(startDate.get(), endDate.get()));
+        return ResponseEntity.ok(bookingManager.availableDates(startDate, endDate));
     }
 
     @PutMapping(path = "/book")
     public ResponseEntity<UUID> book(
-            @RequestBody(required = true) BookingRequest booking) {
-        final Booking input = inputMapper.map(booking);
+            @RequestBody(required = true) BookingDto booking) {
+        final BookingRequest input = inputMapper.map(booking);
         return ResponseEntity.ok(bookingManager.book(input));
     }
 
     @DeleteMapping(path = "/{bookingId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void cancel(@PathVariable(name = "bookingId", required = true) String bookingId, @RequestParam String email) {
-        final UUID id = UUID.fromString(bookingId);
-        bookingManager.cancel(id, email);
+    public void cancel(@PathVariable(name = "bookingId", required = true) String bookingId) {
+        final UUID id = inputMapper.mapBookingId(bookingId);
+        bookingManager.cancel(id);
     }
 }
 

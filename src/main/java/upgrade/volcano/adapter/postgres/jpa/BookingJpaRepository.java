@@ -12,8 +12,7 @@ import java.util.UUID;
 @Repository
 public interface BookingJpaRepository extends JpaRepository<BookingEntity, UUID> {
 
-    Optional<BookingEntity> findOptionalByIdAndEmail(UUID id, String userEmail);
+    Optional<BookingEntity> findOptionalByBookingId(String bookingId);
 
     Set<BookingEntity> findByIsCancelledFalseAndStartDateBetween(LocalDate startDate, LocalDate endDate);
-    Set<BookingEntity> findByIsCancelledFalse();
 }

@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
-public class BookingRequest {
+public class BookingDto {
     private UUID bookingId;
     private String name;
     private String email;

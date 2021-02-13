@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class Booking {
-    private final Optional<UUID> id;
+    private Optional<UUID> id;
     private final String name;
     private final String email;
     private final LocalDate startDate;
@@ -35,10 +35,9 @@ public class Booking {
         return Objects.hash(id, name, email, startDate, endDate);
     }
 
-    public boolean isNew() {
-        return id.isEmpty();
+    public void setId(final UUID id){
+        this.id = Optional.of(id);
     }
-
     public UUID getId() {
         return id.orElse(null);
     }
@@ -112,7 +111,5 @@ public class Booking {
             this.endDate = endDate;
             return this;
         }
-
-
     }
 }

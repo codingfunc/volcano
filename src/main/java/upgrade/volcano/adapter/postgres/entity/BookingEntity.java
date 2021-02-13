@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -21,12 +22,19 @@ import java.util.UUID;
 @AllArgsConstructor
 public class BookingEntity {
 
+    /**
+     * Database primary key
+     */
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+    /**
+     * The domain id.
+     */
+    @Column(name = "booking_id")
+    private String bookingId;
 
     @Column(name = "name")
     private String name;

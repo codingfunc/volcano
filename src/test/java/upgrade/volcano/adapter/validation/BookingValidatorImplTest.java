@@ -3,7 +3,7 @@ package upgrade.volcano.adapter.validation;
 import org.junit.jupiter.api.Test;
 import upgrade.volcano.domain.BookingValidator;
 import upgrade.volcano.domain.exception.BookingException;
-import upgrade.volcano.domain.model.Booking;
+import upgrade.volcano.domain.model.BookingRequest;
 
 import java.time.LocalDate;
 
@@ -21,7 +21,7 @@ class BookingValidatorImplTest {
     public void testCantBookInThePast() {
         final LocalDate startDate = LocalDate.now().minusDays(3L);
         final LocalDate endDate = LocalDate.now();
-        var booking = Booking.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
+        var booking = BookingRequest.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
         BookingException exception = assertThrows(BookingException.class, () -> {
             validator.validate(booking);
         });
@@ -32,7 +32,7 @@ class BookingValidatorImplTest {
     public void testCantBookToday() {
         final LocalDate startDate = LocalDate.now();
         final LocalDate endDate = startDate.plusDays(3L);
-        var booking = Booking.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
+        var booking = BookingRequest.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
         BookingException exception = assertThrows(BookingException.class, () -> {
             validator.validate(booking);
         });
@@ -43,7 +43,7 @@ class BookingValidatorImplTest {
     public void testCantBookBeyondAMonth() {
         final LocalDate startDate = LocalDate.now().plusDays(1L);
         final LocalDate endDate = startDate.plusDays(31L);
-        var booking = Booking.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
+        var booking = BookingRequest.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
         BookingException exception = assertThrows(BookingException.class, () -> {
             validator.validate(booking);
         });
@@ -55,7 +55,7 @@ class BookingValidatorImplTest {
     public void testValidDateOrder() {
         final LocalDate startDate = LocalDate.now().plusDays(1L);
         final LocalDate endDate = startDate.plusDays(2L);
-        var booking = Booking.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
+        var booking = BookingRequest.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
         validator.validate(booking);
     }
 
@@ -63,7 +63,7 @@ class BookingValidatorImplTest {
     public void testInvalidDateOrder() {
         final LocalDate startDate = LocalDate.now().plusDays(3L);
         final LocalDate endDate = LocalDate.now().plusDays(2L);
-        var booking = Booking.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
+        var booking = BookingRequest.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
         BookingException exception = assertThrows(BookingException.class, () -> {
             validator.validate(booking);
         });
