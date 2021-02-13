@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import upgrade.volcano.adapter.cache.BookingCache;
+import upgrade.volcano.adapter.postgres.cache.BookingCache;
 import upgrade.volcano.adapter.postgres.BookingRepositoryImpl;
 import upgrade.volcano.adapter.postgres.jpa.BookingJpaRepository;
 import upgrade.volcano.adapter.validation.BookingValidatorImpl;
@@ -20,16 +20,18 @@ public class BookingConfiguration {
     private Integer bookingMaxDuration;
 
     @Value("${booking.advance.min}")
-    private Long bookingMinDaysInAdvance;
+    private Integer bookingMinDaysInAdvance;
 
     @Value("${booking.advance.max}")
-    private Long bookingMaxDaysInAdvance;
-
-    @Autowired
-    private BookingCache bookingCache;
+    private Integer bookingMaxDaysInAdvance;
 
     @Autowired
     private BookingJpaRepository bookingJpaRepository;
+
+    @Bean
+    BookingCache bookingCache() {
+        return new BookingCache(bookingMaxDaysInAdvance);
+    }
 
     @Bean
     public BookingValidator bookingValidator() {
@@ -39,7 +41,7 @@ public class BookingConfiguration {
 
     @Bean
     public BookingRepository bookingRepository() {
-        return new BookingRepositoryImpl(bookingJpaRepository, bookingCache);
+        return new BookingRepositoryImpl(bookingJpaRepository, bookingCache());
     }
 
     @Bean

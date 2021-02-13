@@ -17,6 +17,17 @@ public class EntityMapper {
         return entity;
     }
 
+    public Booking map(final BookingEntity entity) {
+        return
+                Booking.builder().forId(entity.getId())
+                        .forClient(entity.getName())
+                        .forEmail(entity.getEmail())
+                        .startingAt(entity.getStartDate())
+                        .endingAt(entity.getEndDate())
+                        .build();
+    }
+
+
     public void populateEntity(final BookingEntity entity, final Booking booking) {
         entity.setName(booking.getName());
         entity.setStartDate(booking.getStartDate());

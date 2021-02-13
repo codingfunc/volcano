@@ -35,6 +35,10 @@ public class Booking {
         return Objects.hash(id, name, email, startDate, endDate);
     }
 
+    public boolean isNew() {
+        return id.isEmpty();
+    }
+
     public UUID getId() {
         return id.orElse(null);
     }

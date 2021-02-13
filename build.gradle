@@ -20,6 +20,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.apache.commons:commons-lang3:3.11'
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
+    implementation 'com.github.ben-manes.caffeine:caffeine:2.8.8'
 
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.18'
     compile group: 'io.swagger.core.v3', name: 'swagger-core', version: '2.1.6'

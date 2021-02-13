@@ -17,6 +17,16 @@ class BookingValidatorImplTest {
     private Long bookingMaxDaysInAdvance = 30L;
     private BookingValidator validator = new BookingValidatorImpl(bookingMaxDuration, bookingMinDaysInAdvance, bookingMaxDaysInAdvance);
 
+    @Test
+    public void testCantBookInThePast() {
+        final LocalDate startDate = LocalDate.now().minusDays(3L);
+        final LocalDate endDate = LocalDate.now();
+        var booking = Booking.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
+        BookingException exception = assertThrows(BookingException.class, () -> {
+            validator.validate(booking);
+        });
+        assertTrue(BookingException.ErrorType.INVALID_DATES.equals(exception.getErrorType()));
+    }
 
     @Test
     public void testCantBookToday() {
@@ -30,7 +40,7 @@ class BookingValidatorImplTest {
     }
 
     @Test
-    public void testCantBeyondAMonth() {
+    public void testCantBookBeyondAMonth() {
         final LocalDate startDate = LocalDate.now().plusDays(1L);
         final LocalDate endDate = startDate.plusDays(31L);
         var booking = Booking.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();

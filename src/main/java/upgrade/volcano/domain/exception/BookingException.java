@@ -6,7 +6,8 @@ public class BookingException extends RuntimeException {
         INVALID_INPUT,
         INVALID_DATES,
         BOOKING_NOT_FOUND,
-        DATES_NOT_AVAILABLE
+        DATES_NOT_AVAILABLE,
+        MULTIPLE_BOOKINGS_NOT_ALLOWED
     }
 
     private final ErrorType errorType;

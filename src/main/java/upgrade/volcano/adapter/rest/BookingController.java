@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import upgrade.volcano.adapter.rest.dto.BookingDto;
+import upgrade.volcano.adapter.rest.dto.BookingRequest;
 import upgrade.volcano.domain.BookingManager;
 import upgrade.volcano.domain.model.Booking;
 
@@ -39,7 +39,7 @@ public class BookingController {
 
     @PutMapping(path = "/book")
     public ResponseEntity<UUID> book(
-            @RequestBody(required = true) BookingDto booking) {
+            @RequestBody(required = true) BookingRequest booking) {
         final Booking input = inputMapper.map(booking);
         return ResponseEntity.ok(bookingManager.book(input));
     }

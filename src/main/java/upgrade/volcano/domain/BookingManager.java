@@ -29,4 +29,11 @@ public interface BookingManager {
      * @return returns a list of days for booking.
      */
     Set<LocalDate> availableDates(LocalDate startDate, LocalDate endDate);
+
+    /**
+     * returns all active bookings registered to given email
+     * @param email user email
+     * @return set of all active bookings
+     */
+    Set<Booking> findAllByEmail(String email);
 }
