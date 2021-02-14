@@ -60,7 +60,7 @@ public class BookingValidatorImpl implements BookingValidator {
         // The campsite can be reserved for max MAX_DURATION days.
         final long daysBetween = DAYS.between(startDate, endDate) + 1;
         if (daysBetween > config.getMaxDuration()) {
-            throw new BookingException(BookingException.ErrorType.INVALID_DATES,
+            throw new BookingException(BookingException.ErrorType.INVALID_DURATION,
                     "The campsite can be reserved for max " + config.getMaxDuration() + " days");
         }
     }

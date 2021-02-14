@@ -1,6 +1,5 @@
 package upgrade.volcano.domain;
 
-import upgrade.volcano.domain.exception.BookingException;
 import upgrade.volcano.domain.model.Booking;
 import upgrade.volcano.domain.model.ConstraintsConfig;
 
@@ -63,21 +62,21 @@ public class BookingManagerImpl implements BookingManager {
 
     @Override
     public List<LocalDate> findAvailableDates(LocalDate startDate, LocalDate endDate) {
-        if (Objects.isNull(startDate) || Objects.isNull(endDate)) {
-            startDate = LocalDate.now();
-            endDate = startDate.plusDays(config.getMaxDaysInAdvance());
+
+        LocalDate startPeriod = LocalDate.now();
+        LocalDate endPeriod = LocalDate.now().plusDays(config.getMaxDaysInAdvance());
+
+        if (Objects.isNull(startDate) || startDate.isBefore(startPeriod)) {
+            startDate = startPeriod;
         }
 
-        // check for current
-        bookingValidator.validateDateOrder(startDate, endDate);
-
-        if(startDate.isBefore(LocalDate.now())){
-            throw new BookingException(BookingException.ErrorType.INVALID_INPUT, "start date is in the past");
+        if (Objects.isNull(endDate) || endDate.isBefore(startDate) || endDate.isAfter(endPeriod)) {
+            endDate = endPeriod;
         }
 
         // cache should have list of all days
         // check cache
         final Set<LocalDate> booked = bookingCache.findBookedDates();
-        return startDate.datesUntil(endDate).filter(d -> !booked.contains(d)).sorted().collect(Collectors.toList());
+        return startDate.datesUntil(endDate.plusDays(1)).filter(d -> !booked.contains(d)).sorted().collect(Collectors.toList());
     }
 }
