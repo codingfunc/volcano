@@ -8,11 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upgrade.volcano.adapter.rest.dto.BookingDto;
 import upgrade.volcano.domain.BookingManager;
-import upgrade.volcano.domain.model.BookingRequest;
+import upgrade.volcano.domain.model.Booking;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -32,16 +31,16 @@ public class BookingController {
 
     @GetMapping(path = "/availableDates")
     public ResponseEntity<Collection<LocalDate>> getAvailableDates(
-            @RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> startDate,
-            @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> endDate) {
-        return ResponseEntity.ok(bookingManager.availableDates(startDate, endDate));
+            @RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+        return ResponseEntity.ok(bookingManager.findAvailableDates(startDate, endDate));
     }
 
     @PutMapping(path = "/book")
-    public ResponseEntity<UUID> book(
+    public ResponseEntity<String> book(
             @RequestBody(required = true) BookingDto booking) {
-        final BookingRequest input = inputMapper.map(booking);
-        return ResponseEntity.ok(bookingManager.book(input));
+        final Booking input = inputMapper.map(booking);
+        return ResponseEntity.ok(bookingManager.book(input).toString());
     }
 
     @DeleteMapping(path = "/{bookingId}")

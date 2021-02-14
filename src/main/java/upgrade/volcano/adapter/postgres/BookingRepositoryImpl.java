@@ -10,6 +10,7 @@ import upgrade.volcano.domain.model.Booking;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -42,7 +43,7 @@ public class BookingRepositoryImpl implements BookingRepository {
 
     private void checkAvailability(Booking booking) {
         final Set<BookingEntity> activeBookings =
-                jpaRepository.findByIsCancelledFalseAndStartDateBetween(booking.getStartDate(), booking.getEndDate());
+                jpaRepository.findByIsCancelledIsNullAndStartDateBetween(booking.getStartDate(), booking.getEndDate());
 
         // two cases
         // there are no bookings between startdate and end date
@@ -76,7 +77,7 @@ public class BookingRepositoryImpl implements BookingRepository {
 
     @Override
     public Set<Booking> findActiveBookings(final LocalDate startingDate, final LocalDate endDate) {
-        final Set<BookingEntity> activeBookings = jpaRepository.findByIsCancelledFalseAndStartDateBetween(startingDate, endDate);
+        final Set<BookingEntity> activeBookings = jpaRepository.findByIsCancelledIsNullAndStartDateBetween(startingDate, endDate);
         return activeBookings.stream().map(e -> entityMapper.map(e)).collect(Collectors.toSet());
     }
 }
