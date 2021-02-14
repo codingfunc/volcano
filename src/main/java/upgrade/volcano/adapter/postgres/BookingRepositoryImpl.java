@@ -38,6 +38,7 @@ public class BookingRepositoryImpl implements BookingRepository {
         } else {
             final var entity = optEntity.get();
             entityMapper.updateEntity(entity, booking);
+            jpaRepository.save(entity);
         }
     }
 
