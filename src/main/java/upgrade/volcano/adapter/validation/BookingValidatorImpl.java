@@ -18,8 +18,8 @@ public class BookingValidatorImpl implements BookingValidator {
 
     @Override
     public void validate(final Booking booking) {
-        final LocalDate startDate = booking.getStartDate();
-        final LocalDate endDate = booking.getEndDate();
+        final LocalDate startDate = booking.getArrivalDate();
+        final LocalDate endDate = booking.getDepartureDate();
 
         validateDateOrder(startDate, endDate);
         validateMaxDuration(startDate, endDate);
@@ -41,9 +41,9 @@ public class BookingValidatorImpl implements BookingValidator {
         final LocalDate endPeriod = LocalDate.now().plusDays(config.getMaxDaysInAdvance());
 
         // change
-        if (!isEqualOrAfter(booking.getStartDate(), startPeriod)
-                || !isBeforeOrEqual(booking.getStartDate(), endPeriod)
-                || !isBeforeOrEqual(booking.getEndDate(), endPeriod)) {
+        if (!isEqualOrAfter(booking.getArrivalDate(), startPeriod)
+                || !isBeforeOrEqual(booking.getArrivalDate(), endPeriod)
+                || !isBeforeOrEqual(booking.getDepartureDate(), endPeriod)) {
             throw new BookingException(BookingException.ErrorType.INVALID_DATES,
                     "The campsite can be reserved minimum 1 day(s) ahead of arrival and up to 1 month in advance ");
         }

@@ -20,8 +20,8 @@ public class InputMapper {
         return Booking.builder().forId(dto.getBookingId())
                 .forClient(dto.getName())
                 .forEmail(validateEmail(dto.getEmail()))
-                .startingAt(mapDate(dto.getStartDate()))
-                .endingAt(mapDate(dto.getEndDate()))
+                .arrivingAt(mapDate(dto.getArrivalDate()))
+                .departingAt(mapDate(dto.getDepartureDate()))
                 .build();
     }
 

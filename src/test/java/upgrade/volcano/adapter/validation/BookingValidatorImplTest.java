@@ -20,7 +20,7 @@ class BookingValidatorImplTest {
     public void testCantBookInThePast() {
         final LocalDate startDate = LocalDate.now().minusDays(2L);
         final LocalDate endDate = LocalDate.now();
-        var booking = Booking.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
+        var booking = Booking.builder().forClient("test").forEmail("test@test.com").arrivingAt(startDate).departingAt(endDate).build();
         BookingException exception = assertThrows(BookingException.class, () -> {
             validator.validate(booking);
         });
@@ -31,7 +31,7 @@ class BookingValidatorImplTest {
     public void testCantBookToday() {
         final LocalDate startDate = LocalDate.now();
         final LocalDate endDate = startDate.plusDays(2L);
-        var booking = Booking.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
+        var booking = Booking.builder().forClient("test").forEmail("test@test.com").arrivingAt(startDate).departingAt(endDate).build();
         BookingException exception = assertThrows(BookingException.class, () -> {
             validator.validate(booking);
         });
@@ -42,7 +42,7 @@ class BookingValidatorImplTest {
     public void testCantBookBeyondAMonth() {
         final LocalDate startDate = LocalDate.now().plusDays(30L);
         final LocalDate endDate = startDate.plusDays(1L);
-        var booking = Booking.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
+        var booking = Booking.builder().forClient("test").forEmail("test@test.com").arrivingAt(startDate).departingAt(endDate).build();
         BookingException exception = assertThrows(BookingException.class, () -> {
             validator.validate(booking);
         });
@@ -54,7 +54,7 @@ class BookingValidatorImplTest {
     public void testValidDateOrder() {
         final LocalDate startDate = LocalDate.now().plusDays(1L);
         final LocalDate endDate = startDate.plusDays(2L);
-        var booking = Booking.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
+        var booking = Booking.builder().forClient("test").forEmail("test@test.com").arrivingAt(startDate).departingAt(endDate).build();
         validator.validate(booking);
     }
 
@@ -62,7 +62,7 @@ class BookingValidatorImplTest {
     public void testInvalidDateOrder() {
         final LocalDate startDate = LocalDate.now().plusDays(3L);
         final LocalDate endDate = LocalDate.now().plusDays(2L);
-        var booking = Booking.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
+        var booking = Booking.builder().forClient("test").forEmail("test@test.com").arrivingAt(startDate).departingAt(endDate).build();
         BookingException exception = assertThrows(BookingException.class, () -> {
             validator.validate(booking);
         });
@@ -74,7 +74,7 @@ class BookingValidatorImplTest {
     public void testValidBookingDuration() {
         final LocalDate startDate = LocalDate.now().plusDays(1L);
         final LocalDate endDate = startDate.plusDays(config.getMaxDuration() - 1);
-        var booking = Booking.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
+        var booking = Booking.builder().forClient("test").forEmail("test@test.com").arrivingAt(startDate).departingAt(endDate).build();
         validator.validate(booking);
 
     }
@@ -83,7 +83,7 @@ class BookingValidatorImplTest {
     public void testInvalidBookingDuration() {
         final LocalDate startDate = LocalDate.now().plusDays(1L);
         final LocalDate endDate = startDate.plusDays(config.getMaxDuration());
-        var booking = Booking.builder().forClient("test").forEmail("test@test.com").startingAt(startDate).endingAt(endDate).build();
+        var booking = Booking.builder().forClient("test").forEmail("test@test.com").arrivingAt(startDate).departingAt(endDate).build();
         BookingException exception = assertThrows(BookingException.class, () -> {
             validator.validate(booking);
         });

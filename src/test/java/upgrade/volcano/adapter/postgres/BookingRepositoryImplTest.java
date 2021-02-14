@@ -2,7 +2,6 @@ package upgrade.volcano.adapter.postgres;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import upgrade.volcano.adapter.postgres.entity.BookingEntity;
 import upgrade.volcano.adapter.postgres.jpa.BookingJpaRepository;
@@ -36,7 +35,7 @@ class BookingRepositoryImplTest {
         when(jpaRepository.findOptionalByBookingId(eq(booking.getId().toString()))).thenReturn(Optional.empty());
 
         repository.book(booking);
-        Mockito.verify(jpaRepository).findByIsCancelledIsNullAndStartDateBetween(eq(booking.getStartDate()), eq(booking.getEndDate()));
+        Mockito.verify(jpaRepository).findByIsCancelledIsNullAndStartDateBetween(eq(booking.getArrivalDate()), eq(booking.getDepartureDate()));
         Mockito.verify(jpaRepository).findOptionalByBookingId(eq(booking.getId().toString()));
 
         var entity = mapper.map(booking);
@@ -51,13 +50,13 @@ class BookingRepositoryImplTest {
         var existing = mapper.map(booking);
         existing.setEmail("existing-" + booking.getName());
         existing.setEmail("existing-" + booking.getEmail());
-        existing.setStartDate(booking.getStartDate().plusDays(1));
-        existing.setEndDate(booking.getEndDate().plusDays(1));
+        existing.setArrivalDate(booking.getArrivalDate().plusDays(1));
+        existing.setDepartureDate(booking.getDepartureDate().plusDays(1));
 
         when(jpaRepository.findOptionalByBookingId(eq(booking.getId().toString()))).thenReturn(Optional.of(existing));
 
         repository.book(booking);
-        Mockito.verify(jpaRepository).findByIsCancelledIsNullAndStartDateBetween(eq(booking.getStartDate()), eq(booking.getEndDate()));
+        Mockito.verify(jpaRepository).findByIsCancelledIsNullAndStartDateBetween(eq(booking.getArrivalDate()), eq(booking.getDepartureDate()));
         Mockito.verify(jpaRepository).findOptionalByBookingId(eq(booking.getId().toString()));
 
 
@@ -95,8 +94,8 @@ class BookingRepositoryImplTest {
                         .forId(id)
                         .forClient("John Doe")
                         .forEmail("test@test.com")
-                        .startingAt(startDate)
-                        .endingAt(endDate)
+                        .arrivingAt(startDate)
+                        .departingAt(endDate)
                         .build();
     }
 }

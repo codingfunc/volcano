@@ -62,10 +62,8 @@ public class BookingManagerImpl implements BookingManager {
 
     @Override
     public List<LocalDate> findAvailableDates(LocalDate startDate, LocalDate endDate) {
-
         LocalDate startPeriod = LocalDate.now();
         LocalDate endPeriod = LocalDate.now().plusDays(config.getMaxDaysInAdvance());
-
         if (Objects.isNull(startDate) || startDate.isBefore(startPeriod)) {
             startDate = startPeriod;
         }

@@ -58,9 +58,9 @@ public class DefaultCache implements BookingCache {
         // always check from current date
         return cache.asMap().values()
                 .stream()
-                .filter(booking -> LocalDate.now().isBefore(booking.getStartDate()))
+                .filter(booking -> LocalDate.now().isBefore(booking.getArrivalDate()))
                 .map(booking -> {
-                    return booking.getStartDate().datesUntil(booking.getEndDate().plusDays(1));
+                    return booking.getArrivalDate().datesUntil(booking.getDepartureDate().plusDays(1));
                 }).flatMap(s -> s).collect(Collectors.toSet());
     }
 

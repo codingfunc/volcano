@@ -14,8 +14,8 @@ public class EntityMapper {
         entity.setBookingId(booking.getId().toString());
         entity.setName(booking.getName());
         entity.setEmail(booking.getEmail());
-        entity.setStartDate(booking.getStartDate());
-        entity.setEndDate(booking.getEndDate());
+        entity.setArrivalDate(booking.getArrivalDate());
+        entity.setDepartureDate(booking.getDepartureDate());
         return entity;
     }
 
@@ -24,8 +24,8 @@ public class EntityMapper {
                 Booking.builder().forId(UUID.fromString(entity.getBookingId()))
                         .forClient(entity.getName())
                         .forEmail(entity.getEmail())
-                        .startingAt(entity.getStartDate())
-                        .endingAt(entity.getEndDate())
+                        .arrivingAt(entity.getArrivalDate())
+                        .departingAt(entity.getDepartureDate())
                         .build();
     }
 
@@ -34,8 +34,8 @@ public class EntityMapper {
         // will not
         entity.setEmail(booking.getEmail());
         entity.setName(booking.getName());
-        entity.setStartDate(booking.getStartDate());
-        entity.setEndDate(booking.getEndDate());
+        entity.setArrivalDate(booking.getArrivalDate());
+        entity.setDepartureDate(booking.getDepartureDate());
     }
 
 }

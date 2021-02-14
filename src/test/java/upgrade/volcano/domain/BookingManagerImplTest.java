@@ -8,8 +8,6 @@ import upgrade.volcano.domain.model.Booking;
 import upgrade.volcano.domain.model.ConstraintsConfig;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -88,8 +86,8 @@ class BookingManagerImplTest {
                         .forId(id)
                         .forClient("John Doe")
                         .forEmail("test@test.com")
-                        .startingAt(startDate)
-                        .endingAt(endDate)
+                        .arrivingAt(startDate)
+                        .departingAt(endDate)
                         .build();
     }
 }

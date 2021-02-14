@@ -11,15 +11,15 @@ public class Booking {
     private Optional<UUID> id;
     private final String name;
     private final String email;
-    private final LocalDate startDate;
-    private final LocalDate endDate;
+    private final LocalDate arrivalDate;
+    private final LocalDate departureDate;
 
-    private Booking(final UUID id, final String name, final String email, final LocalDate startDate, final LocalDate endDate) {
+    private Booking(final UUID id, final String name, final String email, final LocalDate arrivalDate, final LocalDate departureDate) {
         this.id = Optional.ofNullable(id);
         this.name = name;
         this.email = email;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.arrivalDate = arrivalDate;
+        this.departureDate = departureDate;
     }
 
     @Override
@@ -27,12 +27,12 @@ public class Booking {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Booking booking = (Booking) o;
-        return id.equals(booking.id) && name.equals(booking.name) && email.equals(booking.email) && startDate.equals(booking.startDate) && endDate.equals(booking.endDate);
+        return id.equals(booking.id) && name.equals(booking.name) && email.equals(booking.email) && arrivalDate.equals(booking.arrivalDate) && departureDate.equals(booking.departureDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, startDate, endDate);
+        return Objects.hash(id, name, email, arrivalDate, departureDate);
     }
 
     public void setId(final UUID id){
@@ -50,12 +50,12 @@ public class Booking {
         return email;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public LocalDate getArrivalDate() {
+        return arrivalDate;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
+    public LocalDate getDepartureDate() {
+        return departureDate;
     }
 
     @Override
@@ -63,8 +63,8 @@ public class Booking {
         return "Booking{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
+                ", arrivalDate=" + arrivalDate +
+                ", departureDate=" + departureDate +
                 '}';
     }
 
@@ -76,15 +76,15 @@ public class Booking {
         private UUID id;
         private String name;
         private String email;
-        private LocalDate startDate;
-        private LocalDate endDate;
+        private LocalDate arrivalDate;
+        private LocalDate departureDate;
 
         public Booking build() {
             Validate.notBlank(name);
             Validate.notBlank(name);
-            Validate.notNull(startDate);
-            Validate.notNull(endDate);
-            return new Booking(id, name, email, startDate, endDate);
+            Validate.notNull(arrivalDate);
+            Validate.notNull(departureDate);
+            return new Booking(id, name, email, arrivalDate, departureDate);
         }
 
         public Builder forClient(final String clientName) {
@@ -102,13 +102,13 @@ public class Booking {
             return this;
         }
 
-        public Builder startingAt(final LocalDate startDate) {
-            this.startDate = startDate;
+        public Builder arrivingAt(final LocalDate arrivalDate) {
+            this.arrivalDate = arrivalDate;
             return this;
         }
 
-        public Builder endingAt(final LocalDate endDate) {
-            this.endDate = endDate;
+        public Builder departingAt(final LocalDate departureDate) {
+            this.departureDate = departureDate;
             return this;
         }
     }

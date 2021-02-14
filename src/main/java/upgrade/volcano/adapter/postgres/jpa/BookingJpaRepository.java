@@ -15,5 +15,5 @@ public interface BookingJpaRepository extends JpaRepository<BookingEntity, UUID>
 
     Optional<BookingEntity> findOptionalByBookingId(String bookingId);
 
-    Set<BookingEntity> findByIsCancelledIsNullAndStartDateBetween(LocalDate startDate, LocalDate endDate);
+    Set<BookingEntity> findByIsCancelledIsNullAndDepartureDateBetween(LocalDate startDate, LocalDate endDate);
 }

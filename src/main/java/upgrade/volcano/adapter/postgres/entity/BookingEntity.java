@@ -42,11 +42,11 @@ public class BookingEntity {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "start_date")
-    private LocalDate startDate;
+    @Column(name = "arrival_date")
+    private LocalDate arrivalDate;
 
-    @Column(name = "end_date")
-    private LocalDate endDate;
+    @Column(name = "departure_date")
+    private LocalDate departureDate;
 
     @Column(name = "is_cancelled")
     private Boolean isCancelled;
