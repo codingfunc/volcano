@@ -14,7 +14,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * A fast cache to maintain all active bookings.
+ * A fast synchronized cache to maintain all active bookings.
+ * For distributed systems a distributed cache like Radis can be injected in-place
  */
 public class DefaultCache implements BookingCache {
 
