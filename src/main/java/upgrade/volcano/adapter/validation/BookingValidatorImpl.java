@@ -42,7 +42,8 @@ public class BookingValidatorImpl implements BookingValidator {
 
         // change
         if (!isEqualOrAfter(booking.getStartDate(), startPeriod)
-                || !isBeforeOrEqual(booking.getStartDate(), endPeriod)) {
+                || !isBeforeOrEqual(booking.getStartDate(), endPeriod)
+                || !isBeforeOrEqual(booking.getEndDate(), endPeriod)) {
             throw new BookingException(BookingException.ErrorType.INVALID_DATES,
                     "The campsite can be reserved minimum 1 day(s) ahead of arrival and up to 1 month in advance ");
         }
