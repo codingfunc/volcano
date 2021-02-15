@@ -25,6 +25,7 @@ public class DefaultCache implements BookingCache {
     private ConstraintsConfig config;
 
     public DefaultCache(final ConstraintsConfig config) {
+        this.config = config;
         // cache duration is the number of days in advance a user can book
         // this also determines how many entries there can be.
         cache = Caffeine.newBuilder()

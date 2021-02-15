@@ -35,7 +35,6 @@ class BookingRepositoryImplTest {
         when(jpaRepository.findOptionalByBookingId(eq(booking.getId().toString()))).thenReturn(Optional.empty());
 
         repository.book(booking);
-        Mockito.verify(jpaRepository).findByIsCancelledIsNullAndStartDateBetween(eq(booking.getArrivalDate()), eq(booking.getDepartureDate()));
         Mockito.verify(jpaRepository).findOptionalByBookingId(eq(booking.getId().toString()));
 
         var entity = mapper.map(booking);
@@ -56,7 +55,6 @@ class BookingRepositoryImplTest {
         when(jpaRepository.findOptionalByBookingId(eq(booking.getId().toString()))).thenReturn(Optional.of(existing));
 
         repository.book(booking);
-        Mockito.verify(jpaRepository).findByIsCancelledIsNullAndStartDateBetween(eq(booking.getArrivalDate()), eq(booking.getDepartureDate()));
         Mockito.verify(jpaRepository).findOptionalByBookingId(eq(booking.getId().toString()));
 
 

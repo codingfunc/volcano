@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -56,8 +57,8 @@ public class BookingController {
         LocalDate startDate = StringUtils.isNotBlank(start) ? inputMapper.mapDate(start) : null;
         LocalDate endDate = StringUtils.isNotBlank(end) ? inputMapper.mapDate(end) : null;
 
-        List<LocalDate> availableDates = bookingManager.findAvailableDates(startDate, endDate);
-        return ResponseEntity.ok(availableDates.stream().map(LocalDate::toString).collect(Collectors.toList()));
+        Set<LocalDate> availableDates = bookingManager.findAvailableDates(startDate, endDate);
+        return ResponseEntity.ok(availableDates.stream().map(LocalDate::toString).sorted().collect(Collectors.toList()));
     }
 
     @PutMapping(path = "/book")

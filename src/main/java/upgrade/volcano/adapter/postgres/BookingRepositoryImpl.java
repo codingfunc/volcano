@@ -29,7 +29,6 @@ public class BookingRepositoryImpl implements BookingRepository {
     @Override
     @Transactional
     synchronized public void book(final Booking booking) {
-//        checkAvailability(booking);
         final var optEntity = jpaRepository.findOptionalByBookingId(booking.getId().toString());
         if (optEntity.isEmpty()) {
             final var entity = entityMapper.map(booking);
@@ -38,19 +37,6 @@ public class BookingRepositoryImpl implements BookingRepository {
             final var entity = optEntity.get();
             entityMapper.updateEntity(entity, booking);
             jpaRepository.save(entity);
-        }
-    }
-
-    private void checkAvailability(Booking booking) {
-        final Set<BookingEntity> activeBookings =
-                jpaRepository.findByIsCancelledIsNullAndDepartureDateBetween(booking.getArrivalDate(), booking.getDepartureDate());
-
-        // two cases
-        // there are no bookings between startdate and end date
-        // there is an existing booking which is being modified
-        boolean notAvailable = activeBookings.stream().anyMatch(ab -> !ab.getBookingId().equals(booking.getId()));
-        if (notAvailable) {
-            throw new BookingException(BookingException.ErrorType.DATES_NOT_AVAILABLE, "dates are not available");
         }
     }
 

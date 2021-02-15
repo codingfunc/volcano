@@ -65,8 +65,8 @@ public class BookingManagerImpl implements BookingManager {
             availableDates.addAll(dates);
         });
 
-        requestedDates.retainAll(availableDates);
-        if (!requestedDates.isEmpty()) {
+        availableDates.retainAll(requestedDates);
+        if (!availableDates.equals(requestedDates)) {
             throw new BookingException(BookingException.ErrorType.DATES_NOT_AVAILABLE, "dates are not available");
         }
     }
