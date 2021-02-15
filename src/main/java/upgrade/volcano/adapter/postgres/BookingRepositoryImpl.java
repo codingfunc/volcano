@@ -29,7 +29,7 @@ public class BookingRepositoryImpl implements BookingRepository {
     @Override
     @Transactional
     synchronized public void book(final Booking booking) {
-        checkAvailability(booking);
+//        checkAvailability(booking);
         final var optEntity = jpaRepository.findOptionalByBookingId(booking.getId().toString());
         if (optEntity.isEmpty()) {
             final var entity = entityMapper.map(booking);

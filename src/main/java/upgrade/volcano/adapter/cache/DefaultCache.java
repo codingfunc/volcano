@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import upgrade.volcano.domain.BookingCache;
 import upgrade.volcano.domain.model.Booking;
+import upgrade.volcano.domain.model.ConstraintsConfig;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -21,13 +22,14 @@ public class DefaultCache implements BookingCache {
 
 
     private Cache<UUID, Booking> cache;
+    private ConstraintsConfig config;
 
-    public DefaultCache(final Integer cacheDurationInDays) {
+    public DefaultCache(final ConstraintsConfig config) {
         // cache duration is the number of days in advance a user can book
         // this also determines how many entries there can be.
         cache = Caffeine.newBuilder()
-                .expireAfterWrite(Duration.of(cacheDurationInDays, ChronoUnit.DAYS))
-                .maximumSize(cacheDurationInDays)
+                .expireAfterWrite(Duration.of(config.getMaxDaysInAdvance(), ChronoUnit.DAYS))
+                .maximumSize(config.getMaxDaysInAdvance())
                 .build();
     }
 
@@ -54,14 +56,27 @@ public class DefaultCache implements BookingCache {
     @Override
     public Set<LocalDate> findBookedDates() {
 
+        final LocalDate start = LocalDate.now().minusDays(config.getMaxDuration());
         // how to handle expired ones
         // always check from current date
         return cache.asMap().values()
                 .stream()
-                .filter(booking -> LocalDate.now().isBefore(booking.getArrivalDate()))
+                .filter(booking -> start.isBefore(booking.getArrivalDate()))
                 .map(booking -> {
                     return booking.getArrivalDate().datesUntil(booking.getDepartureDate().plusDays(1));
                 }).flatMap(s -> s).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<Booking> findBookings() {
+
+        final LocalDate start = LocalDate.now().minusDays(config.getMaxDuration());
+        // how to handle expired ones
+        // always check from current date
+        return cache.asMap().values()
+                .stream()
+                .filter(booking -> start.isBefore(booking.getArrivalDate()))
+                .collect(Collectors.toSet());
     }
 
 }

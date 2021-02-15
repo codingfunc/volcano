@@ -33,7 +33,7 @@ public class BookingConfiguration {
 
     @Bean
     BookingCache bookingCache() {
-        return new DefaultCache(bookingMaxDaysInAdvance);
+        return new DefaultCache(constraintsConfig());
     }
 
     @Bean
