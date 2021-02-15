@@ -53,7 +53,7 @@ class BookingValidatorImplTest {
     @Test
     public void testValidDateOrder() {
         final LocalDate startDate = LocalDate.now().plusDays(1L);
-        final LocalDate endDate = startDate.plusDays(2L);
+        final LocalDate endDate = startDate.plusDays(3L);
         var booking = Booking.builder().forClient("test").forEmail("test@test.com").arrivingAt(startDate).departingAt(endDate).build();
         validator.validate(booking);
     }
@@ -82,7 +82,7 @@ class BookingValidatorImplTest {
     @Test
     public void testInvalidBookingDuration() {
         final LocalDate startDate = LocalDate.now().plusDays(1L);
-        final LocalDate endDate = startDate.plusDays(config.getMaxDuration());
+        final LocalDate endDate = startDate.plusDays(config.getMaxDuration() + 1);
         var booking = Booking.builder().forClient("test").forEmail("test@test.com").arrivingAt(startDate).departingAt(endDate).build();
         BookingException exception = assertThrows(BookingException.class, () -> {
             validator.validate(booking);

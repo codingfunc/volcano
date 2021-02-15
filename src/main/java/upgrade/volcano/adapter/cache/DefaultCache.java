@@ -63,9 +63,7 @@ public class DefaultCache implements BookingCache {
         return cache.asMap().values()
                 .stream()
                 .filter(booking -> start.isBefore(booking.getArrivalDate()))
-                .map(booking -> {
-                    return booking.getArrivalDate().datesUntil(booking.getDepartureDate().plusDays(1));
-                }).flatMap(s -> s).collect(Collectors.toSet());
+                .flatMap(booking -> booking.getArrivalDate().datesUntil(booking.getDepartureDate().plusDays(1))).collect(Collectors.toSet());
     }
 
     @Override

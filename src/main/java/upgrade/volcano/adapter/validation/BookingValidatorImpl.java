@@ -18,48 +18,38 @@ public class BookingValidatorImpl implements BookingValidator {
 
     @Override
     public void validate(final Booking booking) {
-        final LocalDate startDate = booking.getArrivalDate();
-        final LocalDate endDate = booking.getDepartureDate();
+        final LocalDate arrivalDate = booking.getArrivalDate();
+        final LocalDate DepartureDate = booking.getDepartureDate();
 
-        validateDateOrder(startDate, endDate);
-        validateMaxDuration(startDate, endDate);
-        validateAdvanceBooking(booking);
+        validateDateOrder(arrivalDate, DepartureDate);
+        validateMaxDuration(arrivalDate, DepartureDate);
+        validateAdvanceBooking(arrivalDate, DepartureDate);
     }
 
     @Override
-    public void validateDateOrder(LocalDate startDate, LocalDate endDate) {
-        if (!isBeforeOrEqual(startDate, endDate)) {
+    public void validateDateOrder(LocalDate arrivalDate, LocalDate departureDate) {
+        if (arrivalDate.isEqual(departureDate) || arrivalDate.isAfter(departureDate)) {
             throw new BookingException(BookingException.ErrorType.INVALID_INPUT,
-                    "Start date [" + startDate + "] must be same or before departure date [" + endDate + "]");
+                    "arrival date [" + arrivalDate + "] must be before departure date [" + departureDate + "]");
         }
     }
 
-    private void validateAdvanceBooking(final Booking booking) {
+    private void validateAdvanceBooking(LocalDate arrivalDate, LocalDate departureDate) {
         //  The campsite can be reserved minimum 1 day(s) ahead of arrival and up to 1 month in advance.
         final LocalDate today = LocalDate.now();
         final LocalDate startPeriod = LocalDate.now().plusDays(config.getMinDaysInAdvance());
         final LocalDate endPeriod = LocalDate.now().plusDays(config.getMaxDaysInAdvance());
 
-        // change
-        if (!isEqualOrAfter(booking.getArrivalDate(), startPeriod)
-                || !isBeforeOrEqual(booking.getArrivalDate(), endPeriod)
-                || !isBeforeOrEqual(booking.getDepartureDate(), endPeriod)) {
+        if (arrivalDate.isBefore(startPeriod) || arrivalDate.isAfter(endPeriod)
+                || departureDate.isBefore(startPeriod) || departureDate.isAfter(endPeriod)) {
             throw new BookingException(BookingException.ErrorType.INVALID_DATES,
                     "The campsite can be reserved minimum 1 day(s) ahead of arrival and up to 1 month in advance ");
         }
     }
 
-    private boolean isEqualOrAfter(final LocalDate date1, final LocalDate date2) {
-        return date1.isEqual(date2) || date1.isAfter(date2);
-    }
-
-    private boolean isBeforeOrEqual(final LocalDate date1, final LocalDate date2) {
-        return date1.isBefore(date2) || date1.isEqual(date2);
-    }
-
     private void validateMaxDuration(final LocalDate startDate, final LocalDate endDate) {
         // The campsite can be reserved for max MAX_DURATION days.
-        final long daysBetween = DAYS.between(startDate, endDate) + 1;
+        final long daysBetween = DAYS.between(startDate, endDate);
         if (daysBetween > config.getMaxDuration()) {
             throw new BookingException(BookingException.ErrorType.INVALID_DURATION,
                     "The campsite can be reserved for max " + config.getMaxDuration() + " days");

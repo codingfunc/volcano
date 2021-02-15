@@ -38,13 +38,13 @@ class BookingManagerImplTest {
 
     @Test
     void testNewBooking() {
-        final var start = LocalDate.now().plusDays(1);
-        final var end = start.plusDays(2);
-        final var booking = booking(null, start, end);
+        final var arrival = LocalDate.now().plusDays(config.getMinDaysInAdvance());
+        final var departure = arrival.plusDays(config.getMaxDuration());
+        final var booking = booking(null, arrival, departure);
         bookingCache.invalidateAll();
 
         UUID bookingId = bookingManager.book(booking);
-        final var expected = booking(bookingId, start, end);
+        final var expected = booking(bookingId, arrival, departure);
         Mockito.verify(bookingRepository).book(eq(expected));
         Optional<Booking> cached = bookingCache.get(bookingId);
         assertTrue(cached.isPresent());
@@ -56,12 +56,12 @@ class BookingManagerImplTest {
 
     @Test
     void testNewBookingNotAvailable() {
-        final var start = LocalDate.now().plusDays(1);
-        final var end = start.plusDays(2);
-        final var booking = booking(null, start, end);
+        final var arrival = LocalDate.now().plusDays(1);
+        final var departure = arrival.plusDays(2);
+        final var booking = booking(null, arrival, departure);
 
         // cache an existing booking with overlapping days
-        var existingBooking = booking(UUID.randomUUID(), start.plusDays(1), start.plusDays(2));
+        var existingBooking = booking(UUID.randomUUID(), arrival.plusDays(1), arrival.plusDays(2));
         bookingCache.cache(existingBooking);
 
         BookingException exception = assertThrows(BookingException.class, () -> {
@@ -74,11 +74,11 @@ class BookingManagerImplTest {
     void testUpdateBookingNewDates() {
         final var bookingId = UUID.randomUUID();
 
-        final var start = LocalDate.now().plusDays(1);
-        final var end = start.plusDays(2);
-        final var booking = booking(bookingId, start, end);
+        final var arrival = LocalDate.now().plusDays(1);
+        final var departure = arrival.plusDays(2);
+        final var booking = booking(bookingId, arrival, departure);
 
-        final var prevBooking = booking(bookingId, end.plusDays(1), end.plusDays(2));
+        final var prevBooking = booking(bookingId, departure.plusDays(1), departure.plusDays(2));
         bookingCache.invalidateAll();
         bookingCache.cache(prevBooking);
 
@@ -100,11 +100,11 @@ class BookingManagerImplTest {
     void testExtendBooking() {
         final var bookingId = UUID.randomUUID();
 
-        final var start = LocalDate.now().plusDays(1);
-        final var end = start.plusDays(2);
-        final var booking = booking(bookingId, start, end);
+        final var arrival = LocalDate.now().plusDays(1);
+        final var departure = arrival.plusDays(2);
+        final var booking = booking(bookingId, arrival, departure);
 
-        final var prevBooking = booking(bookingId, start, start.plusDays(1));
+        final var prevBooking = booking(bookingId, arrival, arrival.plusDays(1));
         bookingCache.invalidateAll();
         bookingCache.cache(prevBooking);
 
@@ -123,13 +123,13 @@ class BookingManagerImplTest {
 
     @Test
     void testUpdateBookingReduceBooking() {
-        final var start = LocalDate.now().plusDays(1);
-        final var end = start.plusDays(2);
+        final var arrival = LocalDate.now().plusDays(1);
+        final var departure = arrival.plusDays(2);
         final var bookingId = UUID.randomUUID();
-        final var booking = booking(bookingId, start, end);
+        final var booking = booking(bookingId, arrival, departure);
 
         // previous 3 day booking
-        final var prevBooking = booking(bookingId, start, start.plusDays(2));
+        final var prevBooking = booking(bookingId, arrival, arrival.plusDays(2));
         bookingCache.invalidateAll();
         bookingCache.cache(prevBooking);
 
@@ -153,10 +153,10 @@ class BookingManagerImplTest {
 
         Set<LocalDate> booked = bookingCache.findBookedDates();
 
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = startDate.plusDays(5);
-        final var requestedRange = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toSet());
-        final var availableDates = bookingManager.findAvailableDates(startDate, endDate);
+        LocalDate arrival = LocalDate.now();
+        LocalDate departure = arrival.plusDays(5);
+        final var requestedRange = arrival.datesUntil(departure.plusDays(1)).collect(Collectors.toSet());
+        final var availableDates = bookingManager.findAvailableDates(arrival, departure);
 
         requestedRange.removeAll(booked);
         assertEquals(requestedRange, availableDates);
@@ -236,15 +236,15 @@ class BookingManagerImplTest {
 
     @Test
     void testBooking() {
-        final var start = LocalDate.now().plusDays(1);
-        final var end = start.plusDays(1);
+        final var arrival = LocalDate.now().plusDays(1);
+        final var departure = arrival.plusDays(1);
 
         final var threadCount = 5;
         List<Booking> bookings = new ArrayList<>();
-        IntStream.range(0, threadCount).forEach(i -> bookings.add(booking(null, start, end)));
+        IntStream.range(0, threadCount).forEach(i -> bookings.add(booking(null, arrival, departure)));
 
-        final var booking1 = booking(null, start, end);
-        final var booking2 = booking(null, start, end);
+        final var booking1 = booking(null, arrival, departure);
+        final var booking2 = booking(null, arrival, departure);
         bookingManager.book(booking1);
 
         BookingException exception = assertThrows(BookingException.class, () -> {
@@ -265,14 +265,14 @@ class BookingManagerImplTest {
     }
 
 
-    private Booking booking(UUID id, LocalDate startDate, LocalDate endDate) {
+    private Booking booking(UUID id, LocalDate arrivalDate, LocalDate departureDate) {
         return
                 Booking.builder()
                         .forId(id)
                         .forClient("John Doe")
                         .forEmail("test@test.com")
-                        .arrivingAt(startDate)
-                        .departingAt(endDate)
+                        .arrivingAt(arrivalDate)
+                        .departingAt(departureDate)
                         .build();
     }
 }

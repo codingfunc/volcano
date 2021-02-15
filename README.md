@@ -39,7 +39,8 @@ Project is managed using _gradle_. In project directory
 
 #### REST API endpoints 
 * __GET__ `<host>/api/v1/booking/availableDates`
-  * returns a list of available dates for reservation. It can also optionally accept a `startDate` and `endDate` date.  
+  * returns a list of available dates for reservation. It can also optionally accept a `startDate` and `endDate` date.
+    Domain manager uses an in-memory cache to speed up responses.
     ```localhost/api/v1/booking/availableDates?startDate=2021-02-25&endDate=2021-05-01```
 
 * __PUT__ `<host>/api/v1/booking/book`
@@ -54,4 +55,11 @@ Project is managed using _gradle_. In project directory
 
 * __DELETE__ `<host>/api/v1/booking/<bookingId>`
   * cancels a reservation
-    
+  
+
+#### Testing for concurrent bookings
+* Domain manager is synchronised when creating/updating bookings. 
+* Testing for concurrent updates is added in `BookingManagerImplTest`
+
+#### Error messages
+* __REST__ adapter has a `BookingExceptionHandler` which handles and maps the system exceptions to appropriate return codes and messages.
