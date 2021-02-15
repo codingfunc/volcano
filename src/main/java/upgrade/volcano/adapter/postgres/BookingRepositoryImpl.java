@@ -35,7 +35,7 @@ public class BookingRepositoryImpl implements BookingRepository {
             jpaRepository.save(entity);
         } else {
             final var entity = optEntity.get();
-            if(Boolean.TRUE.equals(entity.getIsCancelled())){
+            if (Boolean.TRUE.equals(entity.getIsCancelled())) {
                 throw new BookingException(BookingException.ErrorType.BOOKING_IS_CANCELLED, "Booking id: {" + entity.getBookingId() + "} has been cancelled and can't be updated");
             }
             entityMapper.updateEntity(entity, booking);
