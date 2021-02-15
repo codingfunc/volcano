@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping(
         value = "/api/v1/booking",
@@ -56,8 +58,8 @@ public class BookingController {
             @RequestParam(value = "endDate", required = false) String end) {
         LocalDate startDate = StringUtils.isNotBlank(start) ? inputMapper.mapDate(start) : null;
         LocalDate endDate = StringUtils.isNotBlank(end) ? inputMapper.mapDate(end) : null;
-
         Set<LocalDate> availableDates = bookingManager.findAvailableDates(startDate, endDate);
+        log.debug("available dates {}", availableDates);
         return ResponseEntity.ok(availableDates.stream().map(LocalDate::toString).sorted().collect(Collectors.toList()));
     }
 
@@ -75,6 +77,7 @@ public class BookingController {
     public ResponseEntity book(@RequestBody BookingRequest booking) {
         final Booking input = inputMapper.map(booking);
         final var bookingId = bookingManager.book(input);
+        log.debug("booking request {}", booking);
 
         return Objects.isNull(booking.getBookingId())
                 ? new ResponseEntity(bookingId, HttpStatus.CREATED) : ResponseEntity.ok(bookingId);
@@ -85,6 +88,7 @@ public class BookingController {
     public void cancel(@PathVariable(name = "bookingId", required = true) String bookingId) {
         final UUID id = inputMapper.mapBookingId(bookingId);
         bookingManager.cancel(id);
+        log.debug("deleted booking {}", bookingId);
     }
 }
 

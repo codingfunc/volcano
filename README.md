@@ -49,7 +49,7 @@ Project is managed using _gradle_. In project directory
   ```{
     "bookingId" : "28fe0168-8a1d-414c-a281-d46ebeac9f57"
     "name": "John Doe",
-    "email": "johd.doe@yahoo.com",
+    "email": "john.doe@yahoo.com",
     "startDate": "2021-03-10",
     "endDate": "2021-03-12"
     }  
@@ -64,3 +64,8 @@ Project is managed using _gradle_. In project directory
 
 #### Error messages
 * __REST__ adapter has a `BookingExceptionHandler` which handles and maps the system exceptions to appropriate return codes and messages.
+
+### Future work
+* Database schema management can be done using `liquibase`
+* With current requirements a user (email) can book multiple times. This can be improved to allow booking for the a particular `email` for registered only once for the specific time period.
+  

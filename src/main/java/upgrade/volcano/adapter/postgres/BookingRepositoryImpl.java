@@ -1,5 +1,6 @@
 package upgrade.volcano.adapter.postgres;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import upgrade.volcano.adapter.postgres.entity.BookingEntity;
@@ -15,6 +16,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class BookingRepositoryImpl implements BookingRepository {
 
@@ -33,6 +35,7 @@ public class BookingRepositoryImpl implements BookingRepository {
         if (optEntity.isEmpty()) {
             final var entity = entityMapper.map(booking);
             jpaRepository.save(entity);
+            log.debug("saved new booking {}", booking);
         } else {
             final var entity = optEntity.get();
             if (Boolean.TRUE.equals(entity.getIsCancelled())) {
@@ -40,6 +43,7 @@ public class BookingRepositoryImpl implements BookingRepository {
             }
             entityMapper.updateEntity(entity, booking);
             jpaRepository.save(entity);
+            log.debug("saved existing booking {}", booking);
         }
     }
 
@@ -50,6 +54,7 @@ public class BookingRepositoryImpl implements BookingRepository {
         if (optEntity.isPresent()) {
             return Optional.of(entityMapper.map(optEntity.get()));
         }
+        log.debug("booking {} not found", bookingId);
         return Optional.empty();
     }
 
@@ -62,6 +67,7 @@ public class BookingRepositoryImpl implements BookingRepository {
             throw new BookingException(BookingException.ErrorType.BOOKING_NOT_FOUND, "Booking id: {" + bookingId + "} not found");
         }
         entity.get().setIsCancelled(true);
+        log.debug("booking {} cancelled", bookingId);
     }
 
     @Override
