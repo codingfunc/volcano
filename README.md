@@ -34,6 +34,7 @@ _In general, the system should be able to **handle large volume of requests for 
 Project is managed using _gradle_. In project directory
   * `./gradlew clean` to clean the project
   * `./gradlew build` to build
+  * Create the provided schema (`schema.sql` in resource folder) in the database, and update database connection information in configuration file (`application.yaml`).   
   * `./gradlew bootRun` to run the project.
   * API documentation is available at `<host>/swagger-ui/`
 
