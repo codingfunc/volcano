@@ -69,24 +69,8 @@ public class DefaultCache implements BookingCache {
         final var bookedDates = cache.asMap().values()
                 .stream()
                 .filter(booking -> start.isBefore(booking.getArrivalDate()))
-                .flatMap(booking -> booking.getArrivalDate().datesUntil(booking.getDepartureDate().plusDays(1))).collect(Collectors.toSet());
+                .flatMap(booking -> booking.getArrivalDate().datesUntil(booking.getDepartureDate())).collect(Collectors.toSet());
         log.debug("booked dates {}", bookedDates);
         return bookedDates;
     }
-
-    @Override
-    public Set<Booking> findBookings() {
-
-        final LocalDate start = LocalDate.now().minusDays(config.getMaxDuration());
-        // how to handle expired ones
-        // always check from current date
-        final var bookings = cache.asMap().values()
-                .stream()
-                .filter(booking -> start.isBefore(booking.getArrivalDate()))
-                .collect(Collectors.toSet());
-        log.debug("bookings :{}", bookings);
-        return bookings;
-
-    }
-
 }

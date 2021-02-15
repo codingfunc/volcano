@@ -13,5 +13,4 @@ public interface BookingCache {
     void invalidate(UUID bookingId);
     Optional<Booking> get(UUID bookingId);
     Set<LocalDate> findBookedDates();
-    Set<Booking> findBookings();
 }

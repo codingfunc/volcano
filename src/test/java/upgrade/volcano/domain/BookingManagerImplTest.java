@@ -55,6 +55,27 @@ class BookingManagerImplTest {
     }
 
     @Test
+    void testBackToBackBooking() {
+        final var arrival = LocalDate.now().plusDays(config.getMinDaysInAdvance());
+        final var departure = arrival.plusDays(config.getMaxDuration());
+        final var booking1 = booking(null, arrival, departure);
+        bookingCache.invalidateAll();
+
+        UUID bookingId = bookingManager.book(booking1);
+        final var booking2 = booking(null, departure, departure.plusDays(1));
+        UUID bookingId2 = bookingManager.book(booking2);
+
+        Optional<Booking> cached = bookingCache.get(bookingId);
+        assertTrue(cached.isPresent());
+        assertEquals(cached.get().getName(), booking1.getName());
+        assertEquals(cached.get().getEmail(), booking1.getEmail());
+        assertEquals(cached.get().getArrivalDate(), booking1.getArrivalDate());
+        assertEquals(cached.get().getDepartureDate(), booking1.getDepartureDate());
+    }
+
+
+
+    @Test
     void testNewBookingNotAvailable() {
         final var arrival = LocalDate.now().plusDays(1);
         final var departure = arrival.plusDays(2);
