@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 import upgrade.volcano.adapter.postgres.entity.BookingEntity;
 import upgrade.volcano.adapter.postgres.jpa.BookingJpaRepository;
 import upgrade.volcano.domain.BookingRepository;
+import upgrade.volcano.domain.exception.BookingException;
 import upgrade.volcano.domain.model.Booking;
 
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -67,6 +69,27 @@ class BookingRepositoryImplTest {
         Mockito.verify(jpaRepository).save(eq(expected));
 
     }
+
+    @Test
+    void testUpdateCancelled() {
+        var booking = booking();
+
+        // existing booking has values set
+        var existing = mapper.map(booking);
+        existing.setEmail("existing-" + booking.getName());
+        existing.setEmail("existing-" + booking.getEmail());
+        existing.setArrivalDate(booking.getArrivalDate().plusDays(1));
+        existing.setDepartureDate(booking.getDepartureDate().plusDays(1));
+        existing.setIsCancelled(true);
+
+        when(jpaRepository.findOptionalByBookingId(eq(booking.getId().toString()))).thenReturn(Optional.of(existing));
+        BookingException exception = assertThrows(BookingException.class, () -> {
+            repository.book(booking);
+        });
+        assertTrue(BookingException.ErrorType.BOOKING_IS_CANCELLED.equals(exception.getErrorType()));
+    }
+
+
 
     @Test
     void findByBookingId() {
