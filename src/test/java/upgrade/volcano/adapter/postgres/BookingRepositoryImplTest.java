@@ -12,6 +12,9 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -67,14 +70,20 @@ class BookingRepositoryImplTest {
 
     @Test
     void findByBookingId() {
+        UUID bookingId = UUID.randomUUID();
+        BookingEntity entity = entity(bookingId, LocalDate.now().plusDays(1), LocalDate.now().plusDays(2));
+        Mockito.when(jpaRepository.findOptionalByBookingId(any())).thenReturn(Optional.of(entity));
+        Optional<Booking> optActual = repository.findByBookingId(bookingId);
+        assertTrue(optActual.isPresent());
+
+        final var actual = optActual.get();
+        var expected = mapper.map(entity);
+        assertEquals(expected,actual);
+        Mockito.verify(jpaRepository).findOptionalByBookingId(eq(bookingId.toString()));
     }
 
-    @Test
-    void cancel() {
-    }
-
-    @Test
-    void findActiveBookings() {
+    private BookingEntity entity(){
+        return entity(UUID.randomUUID(), LocalDate.now().plusDays(1), LocalDate.now().plusDays(2));
     }
 
     private BookingEntity entity(UUID id, LocalDate startDate, LocalDate endDate){
